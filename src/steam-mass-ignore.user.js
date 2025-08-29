@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name            Steam mass ignore
 // @description     massively ignore games, DLC, items on Steam
-// @version         0.2.1
+// @version         0.2.2
 // @author          Sébastien Aperghis-Tramoni
 // @copyright       2022 Sébastien Aperghis-Tramoni
 // @license         MIT
@@ -35,7 +35,7 @@
     }
 
 
-    async function ignore_appid(appid) {
+    function ignore_appid(appid) {
         var payload = "sessionid=" + sessionid
                     + "&appid=" + appid
                     + "&remove=0";
@@ -63,35 +63,34 @@
             if (appid && !skip) {
                 appid = appid.nodeValue;
                 console.log("- ignoring appid:" + appid);
-                button.innerHTML = "Ignore all" + ".".repeat(1 + i % 3);
+                button.textContent = `Ignore all: ${i}/${rows.length}`;
                 ignore_appid(appid);
-                await sleep(100);
+                await sleep(500);
             }
         }
-
-        button.innerHTML = "Ignore all: done";
+        button.textContent = `Ignore all: ${rows.length} done`;
     }
 
 
-    async function ignore_all_dlc (event) {
+    function ignore_all_dlc (event) {
         console.log(">>> ignore_all_dlc()");
         loop_ignore(event, "game_area_dlc_row");
     }
 
 
-    async function ignore_in_bundle_sub (event) {
+    function ignore_in_bundle_sub (event) {
         console.log(">>> ignore_in_bundle_sub()");
         loop_ignore(event, "tablet_list_item");
     }
 
 
-    async function ignore_in_search_result (event) {
+    function ignore_in_search_result (event) {
         console.log(">>> ignore_in_search_result()");
         loop_ignore(event, "search_result_row");
     }
 
 
-    async function ignore_in_curator_page (event) {
+    function ignore_in_curator_page (event) {
         console.log(">>> ignore_in_curator_page()");
         loop_ignore(event, "store_capsule");
     }
@@ -103,7 +102,7 @@
     // create [ignore] button
     var ignore_button = document.createElement("a");
     ignore_button.id = "ignore_all_dlc_button";
-    ignore_button.appendChild(document.createTextNode("Ignore all"));
+    ignore_button.textContent = "Ignore all";
 
     var ignore_span = document.createElement("span");
     ignore_span.className = "note";
